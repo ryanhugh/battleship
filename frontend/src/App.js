@@ -45,6 +45,8 @@ class App extends Component {
 
     this.state = {
       classes: [],
+
+      showingClass: null
     };
 
     this.textBox = null;
@@ -53,6 +55,7 @@ class App extends Component {
     console.log('Done loading search index');
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.showClass = this.showClass.bind(this);
   }
 
   onSubmit() {
@@ -69,24 +72,17 @@ class App extends Component {
     });
   }
 
-  render() {
-    return (
-      <div className='App'>
-        <Navbar inverse collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <a href='#'>Rate a Class</a>
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <Nav />
-            <Nav pullRight />
-          </Navbar.Collapse>
-        </Navbar>
+  showClass(aClass) {
+    this.setState({
+      showingClass: aClass
+    })
+  }
 
-        <div className='container'>
-          <form className='form'>
+
+  getHomePage() {
+    return (
+      <span>
+      <form className='form'>
             <FormControl
               className='input'
               type='text'
@@ -103,17 +99,62 @@ class App extends Component {
           <br />
           <div className='results'>
             {this.state.classes.map((aClass) => {
-              console.log(aClass.name);
               return (
                 <div>
                   <Panel header={ `${aClass.subject} ${aClass.classId}: ${aClass.name}` }>
                     {aClass.desc}
+
+                    {/* Add reviews here*/}
+
+                    <br/>
+                    <a href="#" onClick={this.showClass.bind(this, aClass)} > Write a review >> </a>
+
                   </Panel>
                 </div>
               );
             })}
           </div>
+          </span>
+        
+        )
+  }
+
+  getClassDetails() {
+    return null;
+  }
+
+  render() {
+
+    let content;
+    if (this.state.showingClass) {
+      content = this.getClassDetails();
+      console.log('details!', this.state.showingClass, !!this.state.showingClass)
+    }
+    else {
+      content = this.getHomePage();
+      console.log('homepage!')
+    }
+
+
+    return (
+      <div className='App'>
+        <Navbar inverse collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href='#' onClick={this.showClass.bind(this, null)}>Rate a Class</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav />
+            <Nav pullRight />
+          </Navbar.Collapse>
+        </Navbar>
+
+        <div className='container'>
+          {content}
         </div>
+          
       </div>
     );
   }
