@@ -2,13 +2,42 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import elasticlunr from 'elasticlunr';
-import { Button, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl } from 'react-bootstrap';
+import { Button, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
 
 import termDump from './smallClasses.json'
 import searchIndex from './smallSearchIndex.json'
 
 import './bootstrap.css'
 import './bootstrap-theme.css'
+
+
+const classSearchConfig = {
+  fields: {
+    classId: {
+      boost: 4,
+    },
+    acronym: {
+      boost: 4,
+    },
+    subject: {
+      boost: 2,
+    },
+    desc: {
+      boost: 1,
+    },
+    name: {
+      boost: 1.1,
+    },
+    profs: {
+      boost: 1,
+    },
+    crns: {
+      boost: 1,
+    },
+  },
+  expand: true,
+};
+
 
 class App extends Component {
 
@@ -29,7 +58,7 @@ class App extends Component {
 
   onSubmit() {
 
-    let results = this.index.search(this.textBox.value)
+    let results = this.index.search(this.textBox.value, classSearchConfig)
 
     let classes = []
 
@@ -71,13 +100,26 @@ class App extends Component {
                 onChange = { this.onSubmit } 
               />
             </form>
-        </div>
+        
         {this.state.classes.length}
         <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div className="results">
         {this.state.classes.map((aClass) => {
           console.log(aClass.name)
-          return aClass.name
+          return  (
+                  <div>
+                    <Panel header={aClass.subject + ' ' + aClass.classId + ': ' + aClass.name}>
+                      {aClass.desc}
+
+                    </Panel>
+                  </div>
+                  )
         })}
+      </div>
+      </div>
       </div>
     );
   }
