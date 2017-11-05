@@ -107,6 +107,10 @@ class App extends Component {
                     {/* Add reviews here*/}
 
                     <br/>
+
+                    <span>Add a review</span>
+
+
                     <a href="#" onClick={this.showClass.bind(this, aClass)} > Write a review >> </a>
 
                   </Panel>
