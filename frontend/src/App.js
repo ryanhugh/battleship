@@ -4,11 +4,11 @@ import './App.css';
 import elasticlunr from 'elasticlunr';
 import { Button, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
 
-import termDump from './smallClasses.json'
-import searchIndex from './smallSearchIndex.json'
+import termDump from './smallClasses.json';
+import searchIndex from './smallSearchIndex.json';
 
-import './bootstrap.css'
-import './bootstrap-theme.css'
+import './bootstrap.css';
+import './bootstrap-theme.css';
 
 
 const classSearchConfig = {
@@ -40,86 +40,80 @@ const classSearchConfig = {
 
 
 class App extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      classes: []
-    }
+      classes: [],
+    };
 
     this.textBox = null;
-    console.log('Loading search index...')
+    console.log('Loading search index...');
     this.index = elasticlunr.Index.load(searchIndex);
-    console.log('Done loading search index')
+    console.log('Done loading search index');
 
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit() {
+    const results = this.index.search(this.textBox.value, classSearchConfig);
 
-    let results = this.index.search(this.textBox.value, classSearchConfig)
+    const classes = [];
 
-    let classes = []
-
-    for (let result of results.slice(0, 10)) {
-      classes.push(termDump.classMap[result.ref])
+    for (const result of results.slice(0, 10)) {
+      classes.push(termDump.classMap[result.ref]);
     }
 
     this.setState({
-      classes: classes
-    })
+      classes: classes,
+    });
   }
 
   render() {
     return (
-      <div className="App">
-       <Navbar inverse collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <a href="#">Rate a Class</a>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav>
-            
-          </Nav>
-          <Nav pullRight>
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
+      <div className='App'>
+        <Navbar inverse collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <a href='#'>Rate a Class</a>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav />
+            <Nav pullRight />
+          </Navbar.Collapse>
+        </Navbar>
 
-        <div className="container">
-            <form className="form">
-              <FormControl
-                className="input"
-                type='text'
-                placeholder='Enter text'
-                inputRef = {(textBox) => {this.textBox = textBox}}
-                onChange = { this.onSubmit } 
-              />
-            </form>
-        
-        {this.state.classes.length}
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <div className="results">
-        {this.state.classes.map((aClass) => {
-          console.log(aClass.name)
-          return  (
-                  <div>
-                    <Panel header={aClass.subject + ' ' + aClass.classId + ': ' + aClass.name}>
-                      {aClass.desc}
+        <div className='container'>
+          <form className='form'>
+            <FormControl
+              className='input'
+              type='text'
+              placeholder='Enter text'
+              inputRef={ (textBox) => { this.textBox = textBox; } }
+              onChange={ this.onSubmit }
+            />
+          </form>
 
-                    </Panel>
-                  </div>
-                  )
-        })}
-      </div>
-      </div>
+          {this.state.classes.length}
+          <br />
+          <br />
+          <br />
+          <br />
+          <div className='results'>
+            {this.state.classes.map((aClass) => {
+              console.log(aClass.name);
+              return (
+                <div>
+                  <Panel header={ `${aClass.subject} ${aClass.classId}: ${aClass.name}` }>
+                    {aClass.desc}
+                  </Panel>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     );
   }
