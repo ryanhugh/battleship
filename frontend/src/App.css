@@ -26,3 +26,20 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+
+.input {
+  display: inline-block;
+  max-width: 80%;
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+.submitButton {
+  display: inline-block;
+}
+
+
+.container {
+
+}
