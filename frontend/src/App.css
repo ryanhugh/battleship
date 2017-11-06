@@ -34,6 +34,12 @@
   vertical-align: middle;
 }
 
+.class-counter {
+  width: 100%;
+  margin: 10px auto;
+  font-size: 15px;
+}
+
 form.login-form {
   text-align: right;
   height: 50px;

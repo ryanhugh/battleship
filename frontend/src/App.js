@@ -102,12 +102,9 @@ class App extends Component {
               onChange={ this.onSubmit }
             />
           </form>
-
-          {this.state.classes.length}
-          <br />
-          <br />
-          <br />
-          <br />
+          <div className='class-counter'>
+            {this.state.classes.length}
+          </div>
           <div className='results'>
             {this.state.classes.map((aClass) => {
               return (
