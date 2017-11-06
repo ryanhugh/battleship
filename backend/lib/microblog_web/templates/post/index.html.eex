@@ -31,10 +31,10 @@
   <tbody>
 <%= for post <- @posts do %>
     <tr>
-      <td><%= post.postid %></td>
-      <td><%= post.title %></td>
+      <td class="postid"><%= post.postid %></td>
+      <td  class="posttitle"><%= post.title %></td>
       <td class = "content"><%= post.content %></td>
-      <td><%= post.user_id %></td>
+      <td class="postuserid"><%= post.user_id %></td>
 
       <td class="text-right">
         <span><%= link "Show", to: post_path(@conn, :show, post), class: "btn btn-default btn-xs" %></span>

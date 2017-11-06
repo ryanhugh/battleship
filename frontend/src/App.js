@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import elasticlunr from 'elasticlunr';
 import { Button, ButtonToolbar, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
+import cheerio from 'cheerio'
 
 import termDump from './smallClasses.json';
 import searchIndex from './smallSearchIndex.json';
@@ -126,14 +127,31 @@ class App extends Component {
     }
 
 
-
+    console.log(cheerio)
 
     let posts = await request ({
       url: '/posts',
       method: 'GET'
     })
 
+    const $ = cheerio.load(posts);
 
+    let postid = $('.postid')
+    let titles = $('.posttile')
+    let content = $('.content')
+    let users = $('.postuserid')
+
+    let output = []
+
+    for (var i = 0; i < users.length; i++) {
+      output.push({
+        id: postid[i],
+        title: titles[i],
+        content: content[i],
+        userId: users[i]
+      })
+    }
+    console.log(output)
     debugger
 
 
