@@ -49,12 +49,18 @@ class App extends Component {
     };
 
     this.textBox = null;
+
+    this.usernameBox = null;
+    this.passwordBox = null;
+
+
     console.log('Loading search index...');
     this.index = elasticlunr.Index.load(searchIndex);
     console.log('Done loading search index');
 
     this.onSubmit = this.onSubmit.bind(this);
     this.showClass = this.showClass.bind(this);
+    this.verifyLogin = this.verifyLogin.bind(this);
   }
 
   onSubmit() {
@@ -72,6 +78,7 @@ class App extends Component {
   }
 
   verifyLogin() {
+    console.log(this.usernameBox.value, this.passwordBox.value)
     //fill in
   }
 
@@ -156,16 +163,19 @@ class App extends Component {
               className='login-input'
               type='text'
               placeholder='Username'
+              inputRef={ (usernameBox) => { this.usernameBox = usernameBox; } }
             />
             <FormControl
               className='login-input'
               type='password'
               placeholder='Password'
+              inputRef={ (passwordBox) => { this.passwordBox = passwordBox; } }
             />
             <ButtonToolbar>
               <Button 
                 bsStyle="primary" 
-                className='login-submit'>
+                className='login-submit'
+                onClick={this.verifyLogin}>
                   Login!
               </Button>
             </ButtonToolbar>
