@@ -78,8 +78,10 @@ class App extends Component {
   }
 
   verifyLogin() {
-    console.log(this.usernameBox.value, this.passwordBox.value)
-    //fill in
+    // verify that information was input to the forms
+    if(!this.usernameBox.value || !this.passwordBox.value) {
+      alert('Please input a Username and Password!')
+    }
   }
 
   showClass(aClass) {
