@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
 import elasticlunr from 'elasticlunr';
-import { Button, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
+import { Button, ButtonToolbar, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
 
 import termDump from './smallClasses.json';
 import searchIndex from './smallSearchIndex.json';
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
-
+import './App.css';
 
 const classSearchConfig = {
   fields: {
@@ -72,17 +71,20 @@ class App extends Component {
     });
   }
 
+  verifyLogin() {
+    //fill in
+  }
+
   showClass(aClass) {
     this.setState({
       showingClass: aClass
     })
   }
 
-
   getHomePage() {
     return (
       <span>
-      <form className='form'>
+          <form className='form'>
             <FormControl
               className='input'
               type='text'
@@ -149,6 +151,25 @@ class App extends Component {
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
+          <form className='login-form'>
+            <FormControl
+              className='login-input'
+              type='text'
+              placeholder='Username'
+            />
+            <FormControl
+              className='login-input'
+              type='password'
+              placeholder='Password'
+            />
+            <ButtonToolbar>
+              <Button 
+                bsStyle="primary" 
+                className='login-submit'>
+                  Login!
+              </Button>
+            </ButtonToolbar>
+          </form>
           <Navbar.Collapse>
             <Nav />
             <Nav pullRight />
