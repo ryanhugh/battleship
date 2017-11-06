@@ -6,6 +6,8 @@ import { Button, ButtonToolbar, Navbar, MenuItem, Nav, NavItem, NavDropdown, For
 import termDump from './smallClasses.json';
 import searchIndex from './smallSearchIndex.json';
 
+import request from './request'
+
 import './bootstrap.css';
 import './bootstrap-theme.css';
 import './App.css';
@@ -78,11 +80,37 @@ class App extends Component {
     });
   }
 
-  verifyLogin() {
+  async verifyLogin() {
     // verify that information was input to the forms
     if(!this.usernameBox.value || !this.passwordBox.value) {
       alert('Please input a Username and Password!')
     }
+
+    let resp = await request({
+      method: 'POST',
+      form: true,
+      body: {
+        password: this.passwordBox.value,
+        email: this.usernameBox.value
+      },
+      url: '/session'
+    })
+
+    debugger
+
+
+
+
+    let posts = await request ({
+      url: '/posts',
+      method: 'GET'
+    })
+
+    debugger
+
+
+
+
   }
 
   showClass(aClass) {
