@@ -8,6 +8,7 @@ import termDump from './smallClasses.json';
 import searchIndex from './smallSearchIndex.json';
 
 import request from './request'
+import Keys from './Keys'
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
@@ -48,6 +49,10 @@ class App extends Component {
     this.state = {
       classes: [],
 
+
+      // Filled in with the getReviews function
+      reviews: [],
+
       showingClass: null,
 
       isLoggedIn: false,
@@ -71,6 +76,8 @@ class App extends Component {
     this.showClass = this.showClass.bind(this);
     this.verifyLogin = this.verifyLogin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+
+    this.getReviews();
   }
 
   onSubmit() {
@@ -91,8 +98,55 @@ class App extends Component {
     
   }
 
-  getReviews() {
+  async getReviews() {
 
+    let posts = await request({
+      url: '/posts',
+      method: 'GET'
+    })
+
+    const $ = cheerio.load(posts);
+
+    let postid = $('.postid')
+    let titles = $('.posttile')
+    let content = $('.content')
+    let users = $('.postuserid')
+
+    let output = []
+
+    for (var i = 0; i < users.length; i++) {
+      output.push({
+        id: $(postid[i]).text(),
+        classKey: $(titles[i]).text(),
+        content: $(content[i]).text(),
+        userId: $(users[i]).text()
+      })
+    }
+
+    console.log('Fetched reviews')
+
+    this.setState({
+      reviews: output
+    })
+  }
+
+  // Class key is a key to a class. This can be found by running Keys.create(aClass).getHash()
+  // a key looks like this: lafayette.edu/201740/WAIT/001_1967790890
+  async submitReview(classKey, text, userEmail) {
+    let response = await request({
+      method: 'POST',
+      form: true,
+      body: {
+        _utf8: '✓',
+        'post[postid]': '4',
+        'post[title]': classKey,
+        'post[content]': text,
+        'post[user_id]': userEmail
+      },
+      url: '/posts'
+    })
+
+    return this.getReviews();
   }
 
   async verifyLogin() {
@@ -111,7 +165,6 @@ class App extends Component {
       url: '/session'
     })
 
-    debugger
 
     if (resp.includes('Bad email/password')) {
       this.setState({
@@ -125,37 +178,6 @@ class App extends Component {
         email: this.usernameBox.value
       })
     }
-
-
-    console.log(cheerio)
-
-    let posts = await request ({
-      url: '/posts',
-      method: 'GET'
-    })
-
-    const $ = cheerio.load(posts);
-
-    let postid = $('.postid')
-    let titles = $('.posttile')
-    let content = $('.content')
-    let users = $('.postuserid')
-
-    let output = []
-
-    for (var i = 0; i < users.length; i++) {
-      output.push({
-        id: postid[i],
-        title: titles[i],
-        content: content[i],
-        userId: users[i]
-      })
-    }
-    console.log(output)
-    debugger
-
-
-
   }
 
   getMessage() {
@@ -237,8 +259,14 @@ class App extends Component {
           </ul>
         </div>
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
+
+        {/* Add reviews here. Loop over this.state.reviews and show the ones where the title matches Keys.create(this.state.showingClass).getHash(). */}
+
+
         <div className='review-title'>Leave a Review!</div>
         <textarea rows="4" cols="50" className='review-body'></textarea>
+
+        {/* Link up this button to call submitReview. */}
         <Button>Add Review!</Button>
       </span>
       )
@@ -292,7 +320,7 @@ class App extends Component {
       navBarRightSide = this.getLogInOForm()
     }
     else {
-      navBarRightSide = "You are logged in!"
+      navBarRightSide = <a href="#" className="navbar-brand" style={{float: "right"}}>Logged in as {this.state.email}</a>
     }
 
 
