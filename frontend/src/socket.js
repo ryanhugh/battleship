@@ -18,7 +18,6 @@ class Socket {
     
     sendMessage(stars, reviewBody) {
       channel.push("ping", {
-        stars: stars,
         reviewBody: reviewBody,
         classUID: classUID
       });
