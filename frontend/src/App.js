@@ -7,13 +7,13 @@ import cheerio from 'cheerio'
 import termDump from './smallClasses.json';
 import searchIndex from './smallSearchIndex.json';
 
-import request from './request'
-import Keys from './Keys'
+import request from './request';
+import Keys from './Keys';
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
 import './App.css';
-import {Socket} from "phoenix"
+import {Socket} from "phoenix";
 
 const classSearchConfig = {
   fields: {
@@ -63,6 +63,7 @@ class App extends Component {
 
     this.usernameBox = null;
     this.passwordBox = null;
+    this.reviewBody = null;
     
     
     this.socket = new Socket(this.getMessage.bind(this));
@@ -76,6 +77,7 @@ class App extends Component {
     this.showClass = this.showClass.bind(this);
     this.verifyLogin = this.verifyLogin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.submitReview = this.submitReview.bind(this);
 
     this.getReviews();
   }
@@ -236,6 +238,13 @@ class App extends Component {
   getClassDetails() {
     console.log(this.state.showingClass);
     let thisClass = this.state.showingClass;
+    let reviewForm = null;
+
+    if (this.state.isLoggedIn) {
+      reviewForm = this.getReviewForm();
+    } else {
+      reviewForm = <div>You must be logged in to leave a review</div>;
+    }
     
     return (
       <span>
@@ -261,17 +270,35 @@ class App extends Component {
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
 
         { this.state.reviews.map((review) => {
-          if (review.title = Key.create(this.state.showingClass).getHash()) {
+          return(  
             <li className='class-review'>
               <p>{ review.content }</p>
             </li>
-          }
+          )
         })}
 
         <div className='review-title'>Leave a Review!</div>
-        <textarea rows="4" cols="50" className='review-body'></textarea>
-        <Button onclick={ submitReview }>Add Review!</Button>
+        {reviewForm}
       </span>
+      )
+  }
+
+  getReviewForm() {
+    return (
+      <div class='review-form'>
+        <div className='review-title'>Leave a Review!</div>
+        <textarea 
+          rows="4" 
+          cols="50" 
+          className='review-body'
+          ref={(review) => { this.reviewBody = review }}></textarea>
+        <Button onClick={ 
+          this.submitReview.bind(this, 
+                                Keys.create(this.state.showingClass).getHash(),
+                                this.reviewBody, 
+                                this.usernameBox) 
+        }>Add Review!</Button>
+      </div>
       )
   }
 
