@@ -260,14 +260,17 @@ class App extends Component {
         </div>
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
 
-        {/* Add reviews here. Loop over this.state.reviews and show the ones where the title matches Keys.create(this.state.showingClass).getHash(). */}
-
+        { this.state.reviews.map((review) => {
+          if (review.title = Key.create(this.state.showingClass).getHash()) {
+            <li className='class-review'>
+              <p>{ review.content }</p>
+            </li>
+          }
+        })}
 
         <div className='review-title'>Leave a Review!</div>
         <textarea rows="4" cols="50" className='review-body'></textarea>
-
-        {/* Link up this button to call submitReview. */}
-        <Button>Add Review!</Button>
+        <Button onclick={ submitReview }>Add Review!</Button>
       </span>
       )
   }
