@@ -110,7 +110,7 @@ class App extends Component {
     const $ = cheerio.load(posts);
 
     let postid = $('.postid')
-    let titles = $('.posttile')
+    let titles = $('.posttitle')
     let content = $('.content')
     let users = $('.postuserid')
 
@@ -134,7 +134,7 @@ class App extends Component {
 
   // Class key is a key to a class. This can be found by running Keys.create(aClass).getHash()
   // a key looks like this: lafayette.edu/201740/WAIT/001_1967790890
-  async submitReview() {
+  async submitReview(aClass) {
     let classKey = Keys.create(aClass).getHash();
     let text = this.reviewBody.value;
     let userEmail = this.usernameBox;
@@ -242,7 +242,7 @@ class App extends Component {
     let reviewForm = null;
 
     if (this.state.isLoggedIn) {
-      reviewForm = this.getReviewForm();
+      reviewForm = this.getReviewForm(this.state.showingClass);
     } else {
       reviewForm = <div>You must be logged in to leave a review</div>;
     }
@@ -280,22 +280,21 @@ class App extends Component {
           }
         })}
 
-        <div className='review-title'>Leave a Review!</div>
         {reviewForm}
       </span>
       )
   }
 
-  getReviewForm() {
+  getReviewForm(aClass) {
     return (
-      <div class='review-form'>
+      <div className='review-form'>
         <div className='review-title'>Leave a Review!</div>
         <textarea 
           rows="4" 
           cols="50" 
           className='review-body'
           ref={(review) => { this.reviewBody = review }}></textarea>
-        <Button onClick={ this.submitReview }>Add Review!</Button>
+        <Button onClick={ this.submitReview.bind(this, aClass) }>Add Review!</Button>
       </div>
       )
   }
