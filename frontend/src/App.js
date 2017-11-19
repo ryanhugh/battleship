@@ -134,7 +134,11 @@ class App extends Component {
 
   // Class key is a key to a class. This can be found by running Keys.create(aClass).getHash()
   // a key looks like this: lafayette.edu/201740/WAIT/001_1967790890
-  async submitReview(classKey, text, userEmail) {
+  async submitReview() {
+    let classKey = Keys.create(aClass).getHash();
+    let text = this.reviewBody.value;
+    let userEmail = this.usernameBox;
+    
     let response = await request({
       method: 'POST',
       form: true,
@@ -172,7 +176,8 @@ class App extends Component {
       this.setState({
         isLoggedIn: false,
         email: this.usernameBox.value
-      })
+      });
+      alert('Bad Username/Password!');
     }
     else {
       this.setState({
@@ -185,7 +190,6 @@ class App extends Component {
   getMessage() {
     
   }
-
 
   showClass(aClass) {
     console.log(aClass);
@@ -215,14 +219,11 @@ class App extends Component {
                 <div>
                   <Panel header={ `${aClass.subject} ${aClass.classId}: ${aClass.name}` }>
                     {aClass.desc}
-
-                    {/* Add reviews here*/}
-
                     <br/>
 
                     <span>Add a review</span>
 
-
+                    <br/>
                     <a href="#" onClick={this.showClass.bind(this, aClass)} > Write a review >> </a>
 
                   </Panel>
@@ -292,12 +293,7 @@ class App extends Component {
           cols="50" 
           className='review-body'
           ref={(review) => { this.reviewBody = review }}></textarea>
-        <Button onClick={ 
-          this.submitReview.bind(this, 
-                                Keys.create(this.state.showingClass).getHash(),
-                                this.reviewBody, 
-                                this.usernameBox) 
-        }>Add Review!</Button>
+        <Button onClick={ this.submitReview }>Add Review!</Button>
       </div>
       )
   }
