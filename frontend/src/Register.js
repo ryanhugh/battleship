@@ -27,6 +27,10 @@ class Register extends React.Component {
       console.log('invalid password')
       return;
     }
+
+    if (this.passwordInput.value != this.passwordVerify.value) {
+      alert('passwords do not match');
+    }
     
     let response = await request({
       method: 'POST',
@@ -64,7 +68,12 @@ class Register extends React.Component {
 
           <div className="form-group">
               <label className="control-label" for="user_username">Password</label>
-              <input  ref={(element) => {this.passwordInput = element}} className="form-control" id="user_username" name="user[username]" type="text" />
+              <input  ref={(element) => {this.passwordInput = element}} className="form-control" id="user_username" name="user[username]" type="password" />
+          </div>
+
+          <div className="form-group">
+              <label className="control-label" for="user_username">Password Again</label>
+              <input  ref={(element) => {this.passwordVerify = element}} className="form-control" id="user_username" name="user[username]" type="password" />
           </div>
 
           <div className="form-group">
