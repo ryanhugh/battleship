@@ -269,12 +269,13 @@ class App extends Component {
           </ul>
         </div>
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
+        <div>Current Reviews:</div>
 
         { this.state.reviews.map((review) => {
           if (Keys.create(this.state.showingClass).getHash() == review.classKey) {
             return(  
               <li className='class-review'>
-                <p>{ review.content }</p>
+                { review.content }
               </li>
             )
           }
