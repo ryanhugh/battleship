@@ -53,6 +53,6 @@ config :microblog, Microblog.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "postgres",
   password: "postgres",
-  database: "microblog_dev",
+  database: "microblog_prod",
   hostname: "localhost",
   pool_size: 10

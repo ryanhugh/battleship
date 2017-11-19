@@ -65,9 +65,18 @@ class App extends Component {
     this.passwordBox = null;
     this.reviewBody = null;
     
-    
-    this.socket = new Socket(this.getMessage.bind(this));
+    // Set up a channel connection
+    this.socket = new Socket("/socket");
 
+    this.socket.connect();
+
+    // Now that you are connected, you can join channels with a topic:
+    this.channel = this.socket.channel("updates:lobby", {});
+    this.channel.join()
+      .receive("ok", resp => { console.log("Joined successfully", resp) })
+      .receive("error", resp => { console.log("Unable to join", resp) });
+
+    this.channel.on('ping', this.receiveReview.bind(this));
 
     console.log('Loading search index...');
     this.index = elasticlunr.Index.load(searchIndex);
@@ -96,8 +105,13 @@ class App extends Component {
     });
   }
  
-  getMessage() {
-    
+  receiveReview(reviewData) {
+    let newReview = `<li className='class-review'>
+                        ${reviewData.content}
+                      </li>`;
+
+    let reviewContainer = $('#root > div > div > span > ul');
+    reviewContainer.append($(newReview))
   }
 
   async getReviews() {
@@ -152,6 +166,10 @@ class App extends Component {
       url: '/posts'
     })
 
+    this.channel.push("ping", {
+      content: text
+    });
+
     return this.getReviews();
   }
 
@@ -185,10 +203,6 @@ class App extends Component {
         email: this.usernameBox.value
       })
     }
-  }
-
-  getMessage() {
-    
   }
 
   showClass(aClass) {
@@ -271,15 +285,17 @@ class App extends Component {
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
         <div>Current Reviews:</div>
 
-        { this.state.reviews.map((review) => {
-          if (Keys.create(this.state.showingClass).getHash() == review.classKey) {
-            return(  
-              <li className='class-review'>
-                { review.content }
-              </li>
-            )
-          }
-        })}
+        <ul className = 'review-container'>
+          { this.state.reviews.map((review) => {
+            if (Keys.create(this.state.showingClass).getHash() == review.classKey) {
+              return(  
+                <li className='class-review'>
+                  { review.content }
+                </li>
+              )
+            }
+          })}
+        </ul>
 
         {reviewForm}
       </span>
