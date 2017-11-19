@@ -45,16 +45,18 @@ class Register extends React.Component {
       console.log('User made')
     }
     else {
-      console.error('Error creating user')
+      alert('failed to make user');
     }
+
+    this.props.back(); 
 
   }
 
   render() {
     return (
 
-          <div>
-
+        <div className="register-container">
+          <div className="register-title">Register a New User!</div>
           <div className="form-group">
               <label className="control-label" for="user_email">Username</label>
               <input ref={(element) => {this.usernameInput = element}} className="form-control" id="user_email" name="user[email]" type="text" />

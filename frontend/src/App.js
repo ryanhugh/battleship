@@ -9,7 +9,7 @@ import searchIndex from './smallSearchIndex.json';
 
 import request from './request';
 import Keys from './Keys';
-import Register from './Register'
+import Register from './Register';
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
@@ -55,6 +55,7 @@ class App extends Component {
       reviews: [],
 
       showingClass: null,
+      showingRegister: null,
 
       isLoggedIn: false,
       email: ''
@@ -88,6 +89,8 @@ class App extends Component {
     this.verifyLogin = this.verifyLogin.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.submitReview = this.submitReview.bind(this);
+    this.onRegister = this.onRegister.bind(this);
+    this.backToHome = this.backToHome.bind(this);
 
     this.getReviews();
   }
@@ -107,12 +110,7 @@ class App extends Component {
   }
  
   receiveReview(reviewData) {
-    let newReview = `<li className='class-review'>
-                        ${reviewData.content}
-                      </li>`;
-
-    let reviewContainer = $('#root > div > div > span > ul');
-    reviewContainer.append($(newReview))
+    return;
   }
 
   async getReviews() {
@@ -213,6 +211,12 @@ class App extends Component {
     })
   }
 
+  onRegister() {
+    this.setState({
+      showingRegister: true
+    })
+  }
+
   getHomePage() {
     return (
       <span>
@@ -284,7 +288,7 @@ class App extends Component {
           </ul>
         </div>
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
-        <div>Current Reviews:</div>
+        <div className='review-title'>Current Reviews:</div>
 
         <ul className = 'review-container'>
           { this.state.reviews.map((review) => {
@@ -334,6 +338,14 @@ class App extends Component {
               inputRef={ (passwordBox) => { this.passwordBox = passwordBox; } }
             />
             <ButtonToolbar>
+              <Button
+                bsStyle="primary"
+                className="register-submit"
+                onClick={ this.onRegister }> 
+                Register
+              </Button> 
+            </ButtonToolbar>
+            <ButtonToolbar>
               <Button 
                 bsStyle="primary" 
                 className='login-submit'
@@ -346,11 +358,16 @@ class App extends Component {
       )
   }
 
+  backToHome() {
+    this.setState({
+      showingRegister: false
+    });
+  }
 
   render() {
 
-    if (window.location.hash == '#register') {
-      return <Register />
+    if (this.state.showingRegister) {
+      return <Register back={this.backToHome}/>
     }
 
     let content;
