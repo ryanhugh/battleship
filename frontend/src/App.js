@@ -67,7 +67,8 @@ class App extends Component {
     this.reviewBody = null;
     
     // Set up a channel connection
-    this.socket = new Socket("/socket");
+    this.socket = new Socket("ws://" + window.location.hostname + ":4000/socket")
+    // this.socket = new Socket("/socket")
 
     this.socket.connect();
 
@@ -78,6 +79,7 @@ class App extends Component {
       .receive("error", resp => { console.log("Unable to join", resp) });
 
     this.channel.on('ping', this.receiveReview.bind(this));
+
 
     console.log('Loading search index...');
     this.index = elasticlunr.Index.load(searchIndex);
