@@ -9,6 +9,7 @@ import searchIndex from './smallSearchIndex.json';
 
 import request from './request';
 import Keys from './Keys';
+import Register from './Register'
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
@@ -347,6 +348,10 @@ class App extends Component {
 
 
   render() {
+
+    if (window.location.hash == '#register') {
+      return <Register />
+    }
 
     let content;
     if (this.state.showingClass) {
