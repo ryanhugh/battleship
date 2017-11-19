@@ -107,12 +107,17 @@ class App extends Component {
   }
  
   receiveReview(reviewData) {
-    let newReview = `<li className='class-review'>
-                        ${reviewData.content}
-                      </li>`;
 
-    let reviewContainer = $('#root > div > div > span > ul');
-    reviewContainer.append($(newReview))
+    let reviews = this.state.review
+    reviews.push(reviewData)
+    
+    console.log(reviews, reviewData)
+
+    this.setState({
+      review: reviews
+    })
+
+
   }
 
   async getReviews() {
