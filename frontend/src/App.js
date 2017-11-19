@@ -271,11 +271,13 @@ class App extends Component {
         <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
 
         { this.state.reviews.map((review) => {
-          return(  
-            <li className='class-review'>
-              <p>{ review.content }</p>
-            </li>
-          )
+          if (Keys.create(this.state.showingClass).getHash() == review.classKey) {
+            return(  
+              <li className='class-review'>
+                <p>{ review.content }</p>
+              </li>
+            )
+          }
         })}
 
         <div className='review-title'>Leave a Review!</div>
