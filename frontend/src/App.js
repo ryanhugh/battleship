@@ -112,14 +112,7 @@ class App extends Component {
   }
  
   receiveReview(reviewData) {
-    let reviews = this.state.review
-    reviews.push(reviewData)
-    
-    console.log(reviews, reviewData)
-
-    this.setState({
-      review: reviews
-    })
+    this.getReviews()
   }
 
   async getReviews() {
