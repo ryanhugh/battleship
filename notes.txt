@@ -1,0 +1,23 @@
+
+intro: Jonah and Ryan
+
+rate my prof for classes
+teachers and students can look up stuff
+mention alternatives: TRACE, rate my professor
+
+ryan:
+
+talk about the data
+talk about where the data is coming from
+talk about how the search works
+advertise search neu for a bit
+
+talk about websockets
+talk about create-react-app and nginx
+
+jonah:
+
+talk about react and stuff and JavaScript and stuff
+talk about login and registration
+react switching states and stuff
+

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import elasticlunr from 'elasticlunr';
-import { Button, ButtonToolbar, Navbar, MenuItem, Nav, NavItem, NavDropdown, FormControl, Panel } from 'react-bootstrap';
+import { Button, ButtonToolbar, Navbar, Nav, FormControl, Panel } from 'react-bootstrap';
 import cheerio from 'cheerio'
 
-import termDump from './smallClasses.json';
-import searchIndex from './smallSearchIndex.json';
+import termDump from './classes.json';
+import searchIndex from './searchIndex.json';
 
 import request from './request';
 import Keys from './Keys';
@@ -68,7 +67,7 @@ class App extends Component {
     this.reviewBody = null;
     
     // Set up a channel connection
-    this.socket = new Socket("ws://" + window.location.hostname + ":4000/socket")
+    this.socket = new Socket("wss://" + window.location.hostname + ":4000/socket")
     // this.socket = new Socket("/socket")
 
     this.socket.connect();
@@ -154,7 +153,7 @@ class App extends Component {
     let text = this.reviewBody.value;
     let userEmail = this.usernameBox;
     
-    let response = await request({
+    await request({
       method: 'POST',
       form: true,
       body: {
@@ -294,12 +293,15 @@ class App extends Component {
 
         <ul className = 'review-container'>
           { this.state.reviews.map((review) => {
-            if (Keys.create(this.state.showingClass).getHash() == review.classKey) {
+            if (Keys.create(this.state.showingClass).getHash() === review.classKey) {
               return(  
                 <li className='class-review'>
                   { review.content }
                 </li>
               )
+            }
+            else {
+              return null;
             }
           })}
         </ul>

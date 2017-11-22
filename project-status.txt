@@ -1,0 +1,36 @@
+
+CS4550 Fall 2017 - Project Results
+
+
+1. What are the names of the members of your team?
+
+Jonah Min
+Ryan Hughes
+
+
+2. What's the URL where your project is deployed?
+
+https://microblog.courseboard.io/
+
+
+3. What's the URL of your project Github repo?
+
+https://github.com/ryanhugh/webdev-project
+
+
+4. What's the URL and name to download your project Github release?
+
+The release name is "main".
+
+https://github.com/ryanhugh/webdev-project/releases
+
+https://github.com/ryanhugh/webdev-project/releases/tag/one
+
+5. What percentage of your project design did you complete?
+
+Then entire project works. 
+
+6. What additional features would you like to add to your project
+   over winter break?
+
+We could refine the existing functionallity and more functionallity. More functionallity includes signing up for emails when classes change and being able to select between multiple terms of classes. 

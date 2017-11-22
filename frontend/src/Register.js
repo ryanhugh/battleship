@@ -28,7 +28,7 @@ class Register extends React.Component {
       return;
     }
 
-    if (this.passwordInput.value != this.passwordVerify.value) {
+    if (this.passwordInput.value !== this.passwordVerify.value) {
       alert('passwords do not match');
     }
     

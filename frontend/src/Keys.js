@@ -8,7 +8,7 @@
 
 // Copied from lodash source to avoid depending on it here. It wound't be that bad if is needed though. 
 function startsWith(string, target) {
-	return string.slice(0, target.length) == target;
+	return string.slice(0, target.length) === target;
 }
 
 
