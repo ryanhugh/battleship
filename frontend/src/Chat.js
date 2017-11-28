@@ -12,13 +12,13 @@ class Chat extends React.Component {
 
 
     this.state = {
-      messages: []
+      messages: [],
+      username: this.props.username
     }
 
     socket.register(this.receive.bind(this));
 
     this.inputEle = null;
-    this.usernameEle = null;
 
     this.onSendButtonClick = this.onSendButtonClick.bind(this);
   }
@@ -31,7 +31,7 @@ class Chat extends React.Component {
     socket.send({
       type: 'chat',
       value: this.inputEle.value,
-      username: this.usernameEle.value
+      username: this.props.username
     })
     this.inputEle.value = '';
   }
@@ -51,6 +51,12 @@ class Chat extends React.Component {
   }
 
 
+  challengeAUser(username) {
+    console.log(username)
+    this.props.challenge(username);
+  }
+
+
   render() {
 
     return (
@@ -58,16 +64,25 @@ class Chat extends React.Component {
         <div className="chat-container">
           <div className="messages-container">
             {this.state.messages.map((message, index) => {
+
+              let challengeButton = null;
+              if (!this.props.isInGame) {
+                challengeButton = <button onClick={this.challengeAUser.bind(this, message.username)}>Challenge </button>
+              }
+
+
               return (
-                <div key={message + String(index)}>
-                  {message.username} : {message.value}
+                <div key={message + String(index)} >
+                  <span>{message.username}</span>
+                  {challengeButton}
+                   : 
+                   <span>{message.value}</span>
                 </div>
                 )
             })}
           </div>
           <div className="username-container">
-            <div className="username-label">Name:</div>
-            <input defaultValue={"User" + String(Math.random()).slice(5, 10)} className="chat-username" ref={(element) => {this.usernameEle = element}}/>
+            <div className="username-label">Name: {this.props.username}</div>
           </div>
           <div className="input-container">
             <input className="chat-input" ref={(element) => {this.inputEle = element}}/>

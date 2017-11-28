@@ -16,9 +16,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-     
+      username: "User" + String(Math.random()).slice(5, 10),
+      isInGame: false
     };
 
+    this.challenge = this.challenge.bind(this);
+  }
+
+  challenge(username) {
 
   }
 
@@ -27,7 +32,7 @@ class App extends Component {
 
     return (
       <div>
-        <Chat />
+        <Chat username={this.state.username} isInGame={this.state.isInGame} challenge={this.challenge}/>
         <Game />
       </div>
       )
