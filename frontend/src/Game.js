@@ -26,7 +26,7 @@ class Chat extends React.Component {
     this.state = {
       thisBoard: thisBoard,
       otherBoard: otherBoard,
-      phase: 'placing'
+      phase: 'placing',
     }
 
     socket.register(this.receive.bind(this));
@@ -35,7 +35,12 @@ class Chat extends React.Component {
   }
 
   receive(data) {
-    if (data.type !== 'game') {
+    if (data.type === 'board') {
+
+      this.setState({
+        otherBoard: data.board
+      })
+
       return;
     }
 
@@ -44,9 +49,57 @@ class Chat extends React.Component {
 
   submitButton(){
 
+    let thisCount = 0;
+    let otherCount = 0;
+    for (var i = 0; i < 10; i++) {
+      for (var j = 0; j < 10; j++) {
+        if (this.state.otherBoard[i][j]) {
+          otherCount ++ 
+        }
+        if (this.state.thisBoard[i][j]) {
+          if (this.state.phase == 'guessing' && this.state.thisBoard[i][j] < 2) {
+            continue;
+          }
+          thisCount ++ 
+        }
+      }
+    }
+
+    if (this.state.phase == 'placing') {
+      if (thisCount !== 17) {
+        alert("You don't have the correct number of tiles selected!");
+        return;
+      }
+
+
+
+      socket.send({
+        type: 'board',
+        board: this.state.thisBoard
+      })
+
+      this.setState({
+        phase: 'guessing'
+      })
+    }
+
+    if (this.state.phase === 'guessing') {
+      if (thisCount === otherCount) {
+        alert('You win!')
+      }
+      else {
+        alert('Incorrect!')
+      }
+    }
+
   }
 
   onGridChange(whichOne, board) {
+
+
+
+
+
     if (whichOne === 'this') {
       this.setState({
         thisBoard: board,
@@ -69,6 +122,9 @@ class Chat extends React.Component {
     if (this.state.phase === 'placing') {
       instructions = "Pick squares to place your ships! You should place one 5 tile ship, one four tile ship, two 3 tile ships, and one 2 tile ship."
     }
+    else if (this.state.phase === 'guessing') {
+      instructions = 'Now guess where your opponent has placed pieces!'
+    }
 
 
     let contents;
@@ -81,12 +137,12 @@ class Chat extends React.Component {
           <h1>Game between {this.props.playerOne} and {this.props.playerTwo}</h1>
           <div className="left-grid">
             Opponents area
-            <Grid onChange={this.onGridChange.bind(this, 'other')} board={this.state.otherBoard}/>
+            <Grid phase={this.state.phase} onChange={this.onGridChange.bind(this, 'other')} board={this.state.otherBoard}/>
           </div>
 
           <div className="right-grid">
             Your area
-            <Grid onChange={this.onGridChange.bind(this, 'this')} board={this.state.thisBoard}/>
+            <Grid phase={this.state.phase} onChange={this.onGridChange.bind(this, 'this')} board={this.state.thisBoard}/>
           </div>
 
           <div className="status-div">

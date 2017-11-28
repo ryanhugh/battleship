@@ -10,6 +10,13 @@
   background: blue;
 }
 
-.grid-box.checked {
+.grid-box.one {
   background: black;
+}
+
+.grid-box.two {
+  background: purple;
+}
+.grid-box.three {
+  background: red;
 }
