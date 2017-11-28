@@ -1,0 +1,36 @@
+.game-container {
+  position: fixed;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 80%;
+  display: inline-block;
+}
+
+.right-grid {
+  width: 500px;
+  height: 545px;
+  margin: 100px;
+  display: inline-block;
+}
+
+
+.left-grid {
+  width: 500px;
+  height: 545px;
+  margin: 100px;
+  display: inline-block;
+}
+
+.status-div {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 80%;
+  background: #c7c7c7;
+  height: 154px;
+}
+
+.status-div button {
+  font-size: 25px;
+}

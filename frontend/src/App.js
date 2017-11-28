@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar, Navbar, Nav, FormControl, Panel } from 'react-bootstrap';
-import cheerio from 'cheerio'
 
-import request from './request';
 import socket from './socket'
 import Chat from './Chat'
 import Game from './Game'
@@ -27,7 +24,8 @@ class App extends Component {
     socket.register(this.onMessage);
     socket.send({
       type: 'join',
-      message: this.state.username
+      username: this.state.username,
+      value: ' has joined the chat.'
     })
   }
   

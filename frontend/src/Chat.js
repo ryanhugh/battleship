@@ -60,7 +60,6 @@ class Chat extends React.Component {
   render() {
 
     return (
-      <div>
         <div className="chat-container">
           <div className="messages-container">
             {this.state.messages.map((message, index) => {
@@ -89,7 +88,6 @@ class Chat extends React.Component {
             <button className="chat-send-button" onClick={this.onSendButtonClick}>Send</button>
           </div>
         </div>
-      </div>
     );
   }
 }
