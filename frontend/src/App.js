@@ -1,46 +1,14 @@
 import React, { Component } from 'react';
-import elasticlunr from 'elasticlunr';
 import { Button, ButtonToolbar, Navbar, Nav, FormControl, Panel } from 'react-bootstrap';
 import cheerio from 'cheerio'
 
-import termDump from './classes.json';
-import searchIndex from './searchIndex.json';
-
 import request from './request';
-import Keys from './Keys';
 import Register from './Register';
 
 import './bootstrap.css';
 import './bootstrap-theme.css';
 import './App.css';
 import {Socket} from "phoenix";
-
-const classSearchConfig = {
-  fields: {
-    classId: {
-      boost: 4,
-    },
-    acronym: {
-      boost: 4,
-    },
-    subject: {
-      boost: 2,
-    },
-    desc: {
-      boost: 1,
-    },
-    name: {
-      boost: 1.1,
-    },
-    profs: {
-      boost: 1,
-    },
-    crns: {
-      boost: 1,
-    },
-  },
-  expand: true,
-};
 
 class App extends Component {
   constructor(props) {
@@ -65,10 +33,18 @@ class App extends Component {
     this.usernameBox = null;
     this.passwordBox = null;
     this.reviewBody = null;
+
+    let wsProtocol;
+
+    if (window.location.protocol === 'http:') {
+      wsProtocol = 'ws'
+    }
+    else {
+      wsProtocol = 'wss'
+    }
     
     // Set up a channel connection
-    this.socket = new Socket("wss://" + window.location.hostname + ":4000/socket")
-    // this.socket = new Socket("/socket")
+    this.socket = new Socket(wsProtocol + "://" + window.location.hostname + ":4000/socket")
 
     this.socket.connect();
 
@@ -80,10 +56,6 @@ class App extends Component {
 
     this.channel.on('ping', this.receiveReview.bind(this));
 
-
-    console.log('Loading search index...');
-    this.index = elasticlunr.Index.load(searchIndex);
-    console.log('Done loading search index');
 
     this.onSubmit = this.onSubmit.bind(this);
     this.showClass = this.showClass.bind(this);
@@ -97,17 +69,17 @@ class App extends Component {
   }
 
   onSubmit() {
-    const results = this.index.search(this.textBox.value, classSearchConfig);
+    // const results = this.index.search(this.textBox.value, classSearchConfig);
 
-    const classes = [];
+    // const classes = [];
 
-    for (const result of results.slice(0, 10)) {
-      classes.push(termDump.classMap[result.ref]);
-    }
+    // for (const result of results.slice(0, 10)) {
+    //   classes.push(termDump.classMap[result.ref]);
+    // }
 
-    this.setState({
-      classes: classes,
-    });
+    // this.setState({
+    //   classes: classes,
+    // });
   }
  
   receiveReview(reviewData) {
@@ -149,28 +121,28 @@ class App extends Component {
   // Class key is a key to a class. This can be found by running Keys.create(aClass).getHash()
   // a key looks like this: lafayette.edu/201740/WAIT/001_1967790890
   async submitReview(aClass) {
-    let classKey = Keys.create(aClass).getHash();
-    let text = this.reviewBody.value;
-    let userEmail = this.usernameBox;
+    // let classKey = Keys.create(aClass).getHash();
+    // let text = this.reviewBody.value;
+    // let userEmail = this.usernameBox;
     
-    await request({
-      method: 'POST',
-      form: true,
-      body: {
-        _utf8: '✓',
-        'post[postid]': '4',
-        'post[title]': classKey,
-        'post[content]': text,
-        'post[user_id]': userEmail
-      },
-      url: '/posts'
-    })
+    // await request({
+    //   method: 'POST',
+    //   form: true,
+    //   body: {
+    //     _utf8: '✓',
+    //     'post[postid]': '4',
+    //     'post[title]': classKey,
+    //     'post[content]': text,
+    //     'post[user_id]': userEmail
+    //   },
+    //   url: '/posts'
+    // })
 
-    this.channel.push("ping", {
-      content: text
-    });
+    // this.channel.push("ping", {
+    //   content: text
+    // });
 
-    return this.getReviews();
+    // return this.getReviews();
   }
 
   async verifyLogin() {
@@ -254,61 +226,6 @@ class App extends Component {
           </span>
         
         )
-  }
-
-  getClassDetails() {
-    console.log(this.state.showingClass);
-    let thisClass = this.state.showingClass;
-    let reviewForm = null;
-
-    if (this.state.isLoggedIn) {
-      reviewForm = this.getReviewForm(this.state.showingClass);
-    } else {
-      reviewForm = <div>You must be logged in to leave a review</div>;
-    }
-    
-    return (
-      <span>
-        <div className='class-title'>
-          { thisClass.name }
-        </div>
-        <a href={ thisClass.url } className='class-subject'>
-          { `${thisClass.subject }${ thisClass.classId }` }
-        </a>
-        <div className='class-desc'>
-          { thisClass.desc }
-        </div>
-        <div className='crn-container'>
-          <span className='crn-title'><strong> CRN: </strong></span>
-          <ul className='class-crns-list'>
-            { this.state.showingClass.crns.map((crn) => {
-              return(
-                <li className='class-crn'>{ crn }</li>
-              );
-            })}
-          </ul>
-        </div>
-        <a href="#" className='back-button' onClick={ this.showClass.bind(this, null) }>Back</a><br></br>
-        <div className='review-title'>Current Reviews:</div>
-
-        <ul className = 'review-container'>
-          { this.state.reviews.map((review) => {
-            if (Keys.create(this.state.showingClass).getHash() === review.classKey) {
-              return(  
-                <li className='class-review'>
-                  { review.content }
-                </li>
-              )
-            }
-            else {
-              return null;
-            }
-          })}
-        </ul>
-
-        {reviewForm}
-      </span>
-      )
   }
 
   getReviewForm(aClass) {
