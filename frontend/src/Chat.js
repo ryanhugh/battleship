@@ -37,10 +37,10 @@ class Chat extends React.Component {
   }
 
   receive(data) {
-    if (data.type !== 'chat') {
+    if (data.type !== 'chat' && data.type !== 'join') {
       return;
     }
-
+    
     let messages = this.state.messages;
 
     messages.push(data)

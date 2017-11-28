@@ -3,7 +3,7 @@ import React from 'react';
 import socket from './socket'
 
 
-class Chat extends React.Component {
+class Grid extends React.Component {
 
   constructor(props) {
     super(props);
@@ -12,17 +12,6 @@ class Chat extends React.Component {
     this.state = {
       
     }
-
-    socket.register(this.receive.bind(this));
-
-
-  }
-
-  receive(data) {
-    if (data.type !== 'game') {
-      return;
-    }
-
 
   }
 
@@ -41,4 +30,4 @@ class Chat extends React.Component {
   }
 }
 
-export default Chat;
+export default Grid;
