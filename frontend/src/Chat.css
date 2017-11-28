@@ -1,0 +1,48 @@
+.chat-container {
+  position: fixed;
+  height: 100%;
+  width: 20%;
+  border: 6px solid #ccc;
+}
+
+.messages-container {
+  height: calc(100% - 100px);
+  border: 2px solid #2d2d2d!important;
+  width: 100%;
+}
+
+.username-container {
+  height: 50px;
+  height: 50px;
+  width: 100%;
+}
+
+.input-container {
+  height: 50px;
+  height: 50px;
+  width: 100%;
+}
+
+.username-label {
+  display: inline-block;
+}
+
+.chat-username {
+  display: inline-block;
+  height: 72%;
+  width: 83%;
+  border: 3px solid #7b7b7b!important;
+  margin-top: 7px;
+}
+
+
+.chat-input {
+  height: 100%;
+  width: 83%;
+}
+
+.chat-send-button {
+  float: right;
+  width: 17%;
+  height: 100%;
+}
